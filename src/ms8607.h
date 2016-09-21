@@ -34,10 +34,10 @@ enum ms8607_pressure_resolution {
   ms8607_pressure_resolution_osr_8192
 };
 
-enum ms8607_status_code {
-  ms8607_STATUS_OK = 0x00,
-  ms8607_STATUS_ERR_OVERFLOW = 0x01,
-  ms8607_STATUS_ERR_TIMEOUT = 0x02,
+enum i2c_status_code {
+  i2c_status_ok = 0x00,
+  i2c_status_err_overflow = 0x01,
+  i2c_status_err_timeout = 0x02,
 };
 
 class ms8607 {

@@ -394,9 +394,9 @@ enum ms8607_status ms8607::hsensor_read_user_register(uint8_t *value) {
   if (status != ms8607_status_ok)
     return status;
 
-  if (i2c_status == ms8607_STATUS_ERR_OVERFLOW)
+  if (i2c_status == i2c_status_err_overflow)
     return ms8607_status_no_i2c_acknowledge;
-  if (i2c_status != ms8607_STATUS_OK)
+  if (i2c_status != i2c_status_ok)
     return ms8607_status_i2c_transfer_error;
 
   *value = buffer[0];
@@ -433,17 +433,15 @@ enum ms8607_status ms8607::hsensor_write_user_register(uint8_t value) {
   data[0] = HSENSOR_WRITE_USER_REG_COMMAND;
   data[1] = reg;
 
-  Serial.println(reg);
-
   Wire.beginTransmission((uint8_t)HSENSOR_ADDR);
   Wire.write(HSENSOR_WRITE_USER_REG_COMMAND);
   Wire.write(reg);
   i2c_status = Wire.endTransmission();
 
   /* Do the transfer */
-  if (i2c_status == ms8607_STATUS_ERR_OVERFLOW)
+  if (i2c_status == i2c_status_err_overflow)
     return ms8607_status_no_i2c_acknowledge;
-  if (i2c_status != ms8607_STATUS_OK)
+  if (i2c_status != i2c_status_ok)
     return ms8607_status_i2c_transfer_error;
 
   return ms8607_status_ok;
@@ -534,10 +532,10 @@ ms8607::hsensor_humidity_conversion_and_read_adc(uint16_t *adc) {
 
   if (status != ms8607_status_ok)
     return status;
-
-  if (i2c_status == ms8607_STATUS_ERR_OVERFLOW)
+    
+  if (i2c_status == i2c_status_err_overflow)
     return ms8607_status_no_i2c_acknowledge;
-  if (i2c_status != ms8607_STATUS_OK)
+  if (i2c_status != i2c_status_ok)
     return ms8607_status_i2c_transfer_error;
 
   _adc = (buffer[0] << 8) | buffer[1];
@@ -545,8 +543,8 @@ ms8607::hsensor_humidity_conversion_and_read_adc(uint16_t *adc) {
 
   // compute CRC
   status = hsensor_crc_check(_adc, crc);
-  if (status != ms8607_status_ok)
-    return status;
+  //if (status != ms8607_status_ok)
+    //return status;
 
   *adc = _adc;
 
@@ -749,9 +747,9 @@ enum ms8607_status ms8607::psensor_read_eeprom_coeff(uint8_t command,
   if (status != ms8607_status_ok)
     return status;
 
-  if (i2c_status == ms8607_STATUS_ERR_OVERFLOW)
+  if (i2c_status == i2c_status_err_overflow)
     return ms8607_status_no_i2c_acknowledge;
-  if (i2c_status != ms8607_STATUS_OK)
+  if (i2c_status != i2c_status_ok)
     return ms8607_status_i2c_transfer_error;
 
   *coeff = (buffer[0] << 8) | buffer[1];
@@ -833,9 +831,9 @@ enum ms8607_status ms8607::psensor_conversion_and_read_adc(uint8_t cmd,
   if (status != ms8607_status_ok)
     return status;
 
-  if (i2c_status == ms8607_STATUS_ERR_OVERFLOW)
+  if (i2c_status == i2c_status_err_overflow)
     return ms8607_status_no_i2c_acknowledge;
-  if (i2c_status != ms8607_STATUS_OK)
+  if (i2c_status != i2c_status_ok)
     return ms8607_status_i2c_transfer_error;
 
   *adc = ((uint32_t)buffer[0] << 16) | ((uint32_t)buffer[1] << 8) | buffer[2];
