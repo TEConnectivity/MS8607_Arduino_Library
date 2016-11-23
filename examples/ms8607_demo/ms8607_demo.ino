@@ -10,6 +10,8 @@ void setup() {
   Serial.println("==== TE Connectivity ====");
   Serial.println("======== MS8607 =========");
   Serial.println("======== Measure ========");
+
+  m_ms8607.begin();
 }
 
 void loop() {

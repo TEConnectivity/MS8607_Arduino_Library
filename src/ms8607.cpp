@@ -108,11 +108,17 @@ ms8607::ms8607(void)
           PSENSOR_CONVERSION_TIME_OSR_1024, PSENSOR_CONVERSION_TIME_OSR_2048,
           PSENSOR_CONVERSION_TIME_OSR_4096, PSENSOR_CONVERSION_TIME_OSR_8192} {
 
-  Wire.begin();
   hsensor_conversion_time = HSENSOR_CONVERSION_TIME_12b;
   hsensor_i2c_master_mode = ms8607_i2c_no_hold;
   hsensor_heater_on = false;
   psensor_coeff_read = false;
+}
+
+/**
+ * \brief Perform initial configuration. Has to be called once.
+ */
+void ms8607::begin(void) {
+  Wire.begin();
 }
 
 /**
@@ -532,7 +538,7 @@ ms8607::hsensor_humidity_conversion_and_read_adc(uint16_t *adc) {
 
   if (status != ms8607_status_ok)
     return status;
-    
+
   if (i2c_status == i2c_status_err_overflow)
     return ms8607_status_no_i2c_acknowledge;
   if (i2c_status != i2c_status_ok)
@@ -543,8 +549,8 @@ ms8607::hsensor_humidity_conversion_and_read_adc(uint16_t *adc) {
 
   // compute CRC
   status = hsensor_crc_check(_adc, crc);
-  //if (status != ms8607_status_ok)
-    //return status;
+   if (status != ms8607_status_ok)
+     return status;
 
   *adc = _adc;
 

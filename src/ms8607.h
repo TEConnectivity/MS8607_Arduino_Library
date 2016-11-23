@@ -46,6 +46,11 @@ public:
   ms8607();
 
   /**
+   * \brief Perform initial configuration. Has to be called once.
+   */
+  void begin();
+
+  /**
   * \brief Check whether MS8607 device is connected
   *
   * \return bool : status of MS8607
