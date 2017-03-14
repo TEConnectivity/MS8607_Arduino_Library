@@ -12,6 +12,9 @@ void setup() {
   Serial.println("======== Measure ========");
 
   m_ms8607.begin();
+  if (m_ms8607.is_connected() == true) {
+    m_ms8607.reset(); 
+  }
 }
 
 void loop() {
