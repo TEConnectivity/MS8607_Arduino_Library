@@ -670,7 +670,13 @@ bool ms8607::psensor_is_connected(void) {
 enum ms8607_status ms8607::psensor_reset(void) {
   Wire.beginTransmission((uint8_t)PSENSOR_ADDR);
   Wire.write(PSENSOR_RESET_COMMAND);
-  Wire.endTransmission();
+  uint8_t i2c_status = Wire.endTransmission();
+
+  if (i2c_status == i2c_status_err_overflow)
+    return ms8607_status_no_i2c_acknowledge;
+  if (i2c_status != i2c_status_ok)
+    return ms8607_status_i2c_transfer_error;
+  return ms8607_status_ok;
 }
 
 /**
